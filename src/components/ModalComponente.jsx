@@ -1,11 +1,14 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export const ModalComponente = ({ showModal, setShowModal, onUpdate, productoId }) => {
-    const [formData, setFormData] = useState({
+
+    const initialFormData = {
         nombre: '',
         precio: '',
         productoId: ''
-    })
+    }
+
+    const [formData, setFormData] = useState(initialFormData)
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -24,6 +27,10 @@ export const ModalComponente = ({ showModal, setShowModal, onUpdate, productoId 
     const handleClose = () => {
         setShowModal(false)
     }
+
+    useEffect(() => {
+        if (showModal) setFormData(initialFormData)
+    }, [showModal])
 
     return (
         <>
