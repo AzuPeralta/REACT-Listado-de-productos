@@ -1,0 +1,18 @@
+body,html{
+    background-color: black;
+    color: whitesmoke;
+    padding: 2% 3%;
+}
+
+.modal-title, .modal-dialog{
+    color: black;
+}
+
+.button, .btn, .btn-warning, .btn-danger, .btn-sm{
+    margin: 5px;
+}
+
+.calcTotal{
+    font-size: 25px;
+    font-weight: bold;
+}
