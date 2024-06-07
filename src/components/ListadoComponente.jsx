@@ -35,7 +35,9 @@ export const ListadoComponente = ({ productos, isLoading, errors, deleteProducto
                             <th scope="col">Id</th>
                             <th scope="col">Nombre</th>
                             <th scope="col">Precio</th>
+                            <th scope="col">Se vende en</th>
                             <th scope="col">Acciones</th>
+
                         </tr>
                     </thead>
                     <tbody>
@@ -44,6 +46,8 @@ export const ListadoComponente = ({ productos, isLoading, errors, deleteProducto
                                 <th scope="row">{producto.id}</th>
                                 <td>{producto.nombre}</td>
                                 <td>{producto.precio}</td>
+                                <td>{producto.nombreComercio}</td>
+
                                 <td>
                                     <button type="button" className="btn btn-warning btn-sm" onClick={() => handleUpdateClick(producto.id)}>Modificar</button>
                                     <button type="button" className="btn btn-danger btn-sm" onClick={() => deleteProducto(producto.id)}>Borrar</button>
@@ -57,6 +61,8 @@ export const ListadoComponente = ({ productos, isLoading, errors, deleteProducto
                             <td colSpan="1" className="calcTotal">Total: </td>
                             <td className="calcTotal">{calcularTotal()}</td>
                             <td></td>
+                            <td></td>
+
 
                         </tr>
                     </tfoot>
