@@ -10,6 +10,10 @@ export const ListadoComponente = ({ productos, isLoading, errors, deleteProducto
         return productos.reduce((total, item) => total + item.precio, 0).toFixed(2)
     }
 
+    // Ordenar productos por ID de manera ascendente
+    const productosOrdenados = [...productos].sort((a, b) => a.id - b.id);
+
+
     const handleUpdateClick = (productoId) => {
         setSelectedId(productoId)
         setShowModal(true)
@@ -41,7 +45,7 @@ export const ListadoComponente = ({ productos, isLoading, errors, deleteProducto
                         </tr>
                     </thead>
                     <tbody>
-                        {productos.map(producto => (
+                        {productosOrdenados.map(producto => (
                             <tr key={producto.id}>
                                 <th scope="row">{producto.id}</th>
                                 <td>{producto.nombre}</td>
