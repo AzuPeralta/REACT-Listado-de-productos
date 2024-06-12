@@ -13,7 +13,7 @@ export const ListadoComponente = ({ productos, isLoading, errors, deleteProducto
     }
 
     // Ordenar productos por ID de manera ascendente
-    const productosOrdenados = [...productos].sort((a, b) => a.id - b.id)
+   const productosOrdenados = [...productos].sort((a, b) => a.id - b.id)
 
 
     const handleUpdateClick = (productoId) => {

@@ -1,9 +1,9 @@
 import { useState } from "react"
 
-export const FormularioComponente = ({ addProducto }) => {
+export const FormularioComercioComponente = ({ addComercio }) => {
     const initialForm = {
-        nombre: '',
-        precio: ''
+        nombreComercio: '',
+        direccion: ''
     }
     const [formState, setFormState] = useState(initialForm);
 
@@ -18,12 +18,12 @@ export const FormularioComponente = ({ addProducto }) => {
     const onSubmit = (event) => {
         event.preventDefault()
 
-        const producto = {
-            nombre: formState.nombre,
-            precio: formState.precio
+        const comercio = {
+            nombreComercio: formState.nombreComercio,
+            direccion: formState.direccion
         }
 
-        addProducto(producto)
+        addComercio(comercio)
 
         // Resetear el formulario
         setFormState(initialForm)
@@ -32,24 +32,24 @@ export const FormularioComponente = ({ addProducto }) => {
     return (
         <form onSubmit={onSubmit}>
             <div className="mb-3">
-                <label htmlFor="nombre" className="form-label">Nombre del producto</label>
+                <label htmlFor="nombreComercio" className="form-label">Nombre del comercio</label>
                 <input
                     type="text"
                     className="form-control"
-                    name="nombre"
-                    placeholder="Ingresa el nombre del producto"
-                    value={formState.nombre}
+                    name="nombreComercio"
+                    placeholder="Ingresa el nombre del comercio"
+                    value={formState.nombreComercio}
                     onChange={onInputChange}
                 />
             </div>
             <div className="mb-3">
-                <label htmlFor="precio" className="form-label">Precio</label>
+                <label htmlFor="direccion" className="form-label">Dirección</label>
                 <input
-                    type="number"
+                    type="text"
                     className="form-control"
-                    name="precio"
-                    placeholder="Ingresa el precio de tu producto"
-                    value={formState.precio}
+                    name="direccion"
+                    placeholder="Ingresa la direccion del comercio"
+                    value={formState.direccion}
                     onChange={onInputChange}
                 />
             </div>
