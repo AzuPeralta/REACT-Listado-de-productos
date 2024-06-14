@@ -1,55 +1,57 @@
-import { useState } from "react";
+import { useState } from 'react';
 
 export const FormularioComponente = ({ addProducto, addRelacion, comercios }) => {
     const initialForm = {
         nombre: '',
         precio: '',
         nombreComercio: '',
-        idComercio: ''
+        idComercio: '',
     };
-    const [formState, setFormState] = useState(initialForm)
+    const [formState, setFormState] = useState(initialForm);
 
     const onInputChange = ({ target }) => {
-        const { name, value } = target
+        const { name, value } = target;
         setFormState({
             ...formState,
-            [name]: value
+            [name]: value,
         });
     };
 
     const onSelectChange = ({ target }) => {
-        const selectedComercio = comercios.find(comercio => comercio.id === parseInt(target.value))
+        const selectedComercio = comercios.find((comercio) => comercio.id === parseInt(target.value));
         if (selectedComercio) {
             setFormState({
                 ...formState,
                 nombreComercio: selectedComercio.nombreComercio,
-                idComercio: selectedComercio.id
-            })
+                idComercio: selectedComercio.id,
+            });
         }
-    }
+    };
 
     const onSubmit = async (event) => {
-        event.preventDefault()
+        event.preventDefault();
 
         const producto = {
             nombre: formState.nombre,
             precio: formState.precio,
-            nombreComercio: formState.nombreComercio
-        }
+            nombreComercio: formState.nombreComercio,
+        };
 
-        const newProducto = await addProducto(producto)
+        const newProducto = await addProducto(producto);
         if (newProducto && formState.idComercio) {
-            await addRelacion(formState.idComercio, newProducto.id)
+            await addRelacion(formState.idComercio, newProducto.id);
         }
 
         // Resetear el formulario
         setFormState(initialForm);
-    }
+    };
 
     return (
         <form onSubmit={onSubmit}>
             <div className="mb-3">
-                <label htmlFor="nombre" className="form-label">Nombre del producto</label>
+                <label htmlFor="nombre" className="form-label">
+                    Nombre del producto
+                </label>
                 <input
                     type="text"
                     className="form-control"
@@ -60,7 +62,9 @@ export const FormularioComponente = ({ addProducto, addRelacion, comercios }) =>
                 />
             </div>
             <div className="mb-3">
-                <label htmlFor="precio" className="form-label">Precio</label>
+                <label htmlFor="precio" className="form-label">
+                    Precio
+                </label>
                 <input
                     type="number"
                     className="form-control"
@@ -78,8 +82,10 @@ export const FormularioComponente = ({ addProducto, addRelacion, comercios }) =>
                     onChange={onSelectChange}
                     name="idComercio"
                 >
-                    <option value="" disabled>Selecciona uno</option>
-                    {comercios.map(comercio => (
+                    <option value="" disabled>
+                        Selecciona uno
+                    </option>
+                    {comercios.map((comercio) => (
                         <option key={comercio.id} value={comercio.id}>
                             {comercio.nombreComercio}
                         </option>
@@ -87,7 +93,9 @@ export const FormularioComponente = ({ addProducto, addRelacion, comercios }) =>
                 </select>
             </div>
             <br />
-            <button type="submit" className="btn btn-primary">Agregar a la lista</button>
+            <button type="submit" className="btn btn-primary">
+                Agregar a la lista
+            </button>
         </form>
-    )
-}
+    );
+};
