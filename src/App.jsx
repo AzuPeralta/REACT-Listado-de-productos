@@ -1,5 +1,5 @@
-
 import { NavBar } from "./routes/components/NavBar"
+import { ComercioProvider } from "./routes/context/ComercioProvider"
 import { HomeScreen } from "./routes/HomeScreen"
 import { ListadoComercios } from "./routes/ListadoComercios"
 import { ListadoProductos } from "./routes/ListadoProductos"
@@ -9,7 +9,7 @@ export const App = () => {
   
 
   return (
-    <>
+    <ComercioProvider>
       <NavBar></NavBar>
       <br/>
       <Routes>
@@ -20,6 +20,6 @@ export const App = () => {
 
       </Routes>
      
-    </>
+    </ComercioProvider>
   )
 }
