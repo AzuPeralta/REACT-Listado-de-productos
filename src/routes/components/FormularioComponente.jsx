@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState } from "react";
 
 export const FormularioComponente = ({ addProducto, addRelacion, comercios }) => {
     const initialForm = {
@@ -6,16 +6,16 @@ export const FormularioComponente = ({ addProducto, addRelacion, comercios }) =>
         precio: '',
         nombreComercio: '',
         idComercio: ''
-    }
-    const [formState, setFormState] = useState(initialForm);
+    };
+    const [formState, setFormState] = useState(initialForm)
 
     const onInputChange = ({ target }) => {
         const { name, value } = target
         setFormState({
             ...formState,
             [name]: value
-        })
-    }
+        });
+    };
 
     const onSelectChange = ({ target }) => {
         const selectedComercio = comercios.find(comercio => comercio.id === parseInt(target.value))
@@ -28,7 +28,7 @@ export const FormularioComponente = ({ addProducto, addRelacion, comercios }) =>
         }
     }
 
-    const onSubmit = (event) => {
+    const onSubmit = async (event) => {
         event.preventDefault()
 
         const producto = {
@@ -37,11 +37,13 @@ export const FormularioComponente = ({ addProducto, addRelacion, comercios }) =>
             nombreComercio: formState.nombreComercio
         }
 
-        addProducto(producto)
-        addRelacion(formState.idComercio, producto.id)
+        const newProducto = await addProducto(producto)
+        if (newProducto && formState.idComercio) {
+            await addRelacion(formState.idComercio, newProducto.id)
+        }
 
         // Resetear el formulario
-        setFormState(initialForm)
+        setFormState(initialForm);
     }
 
     return (
@@ -68,19 +70,23 @@ export const FormularioComponente = ({ addProducto, addRelacion, comercios }) =>
                     onChange={onInputChange}
                 />
             </div>
-            <label htmlFor="options">Elegi el comercio donde se vende</label>
-            <select
-                className="form-select"
-                value={formState.idComercio}  
-                onChange={onSelectChange}   
-                name="idComercio"
-            >                <option value="" disabled>Selecciona uno</option>
-                {comercios.map(comercio => (
-                    <option key={comercio.id}
-                        value={comercio.id}>{comercio.nombreComercio}</option>
-                ))}
-            </select>
-            <br/>
+            <div className="mb-3">
+                <label htmlFor="options">Elegi el comercio donde se vende</label>
+                <select
+                    className="form-select"
+                    value={formState.idComercio}
+                    onChange={onSelectChange}
+                    name="idComercio"
+                >
+                    <option value="" disabled>Selecciona uno</option>
+                    {comercios.map(comercio => (
+                        <option key={comercio.id} value={comercio.id}>
+                            {comercio.nombreComercio}
+                        </option>
+                    ))}
+                </select>
+            </div>
+            <br />
             <button type="submit" className="btn btn-primary">Agregar a la lista</button>
         </form>
     )
