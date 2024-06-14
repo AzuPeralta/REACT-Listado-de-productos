@@ -1,12 +1,15 @@
 import React from 'react'
-import { useState, useEffect } from "react"
+import { useState, useEffect, useContext } from "react"
 import { FormularioComponente } from "./components/FormularioComponente"
 import { ListadoComponente } from "./components/ListadoComponente"
+import { ComercioContext } from './context/ComercioContext'
+
 
 export const ListadoProductos = () => {
     const [productos, setProductos] = useState([])
     const [isLoading, setIsLoading] = useState(true)
     const [errors, setErrors] = useState(null)
+    const { comercios } = useContext(ComercioContext)
 
     const fetchProductos = async () => {
         try {
@@ -27,8 +30,6 @@ export const ListadoProductos = () => {
         fetchProductos()
     }, [])
 
-    const comercios = [{ "id": 1, "nombreComercio": "Compumundo", "direccion": "Calchaqui 3950", "comercioProductos": [{ "id": 4 }, { "id": 1 }] }, { "id": 2, "nombreComercio": "Fravega", "direccion": "Rivadavia 199", "comercioProductos": [{ "id": 2 }] }, { "id": 4, "nombreComercio": "Garbarino", "direccion": "Alem 119", "comercioProductos": [] }]
-
     const addProducto = async (producto) => {
         try {
             const response = await fetch('https://java-railwaw-crud-apirest-production.up.railway.app/productos', {
@@ -48,8 +49,23 @@ export const ListadoProductos = () => {
         }
     }
 
-    const addRelacion = () => {
-        console.log('Esto agregaria una relacion del producto y el comercio')
+    const addRelacion = async (idComercio, idProducto) => {
+        try {
+            const response = await fetch(`https://java-railwaw-crud-apirest-production.up.railway.app/comercio-producto/${idComercio}/productos/${idProducto}`, {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            if (!response.ok) {
+                throw new Error('Error al agregar la relación')
+            }
+            console.log('Relación agregada correctamente')
+        } catch (error) {
+            setErrors(error.message)
+        }
+
+        console.log(`El producto de id ${idProducto} se vende en el comercio de id ${idComercio}`)
     }
 
     const deleteProducto = async (id) => {
