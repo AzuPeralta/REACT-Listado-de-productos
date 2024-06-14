@@ -51,7 +51,7 @@ export const ComercioProvider = ({ children }) => {
                 method: "DELETE"
             })
             if (!response.ok) {
-                throw new Error('Error al eliminar el comercio')
+                throw new Error('Para poder eliminar el comercio, primero debes eliminar los productos asociados a él. Por favor actualiza la pagina e intentalo de nuevo. ')
             }
             setComercios(comercios.filter(comercio => comercio.id !== id))
         } catch (error) {

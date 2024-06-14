@@ -7,8 +7,7 @@ export const ListadoProductos = () => {
     const [productos, setProductos] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [errors, setErrors] = useState(null);
-    const { comercios } = useContext(ComercioContext);
-
+    const { comercios, isLoading: comerciosLoading, errors: comerciosErrors } = useContext(ComercioContext);
     const fetchProductos = async () => {
         try {
             const response = await fetch('https://java-railwaw-crud-apirest-production.up.railway.app/productos');
@@ -27,6 +26,7 @@ export const ListadoProductos = () => {
     useEffect(() => {
         fetchProductos();
     }, []);
+
 
     const addProducto = async (producto) => {
         try {
@@ -65,7 +65,6 @@ export const ListadoProductos = () => {
             setErrors(error.message);
         }
 
-        console.log(`El producto de id ${idProducto} se vende en el comercio de id ${idComercio}`);
     };
 
     const deleteProducto = async (id) => {
@@ -84,25 +83,42 @@ export const ListadoProductos = () => {
 
     const updateProducto = async (productoModificado) => {
         try {
-            const response = await fetch(`https://java-railwaw-crud-apirest-production.up.railway.app/productos/${productoModificado.productoId}`, {
+            // Obtener el producto actual
+            const productoActual = productos.find((producto) => producto.id === productoModificado.productoId);
+    
+            // Crear un nuevo objeto con los valores actualizados, manteniendo los originales si no se han modificado
+            const productoActualizado = {
+                ...productoActual,
+                nombre: productoModificado.nombre || productoActual.nombre,
+                precio: productoModificado.precio || productoActual.precio,
+            }
+    
+            const response = await fetch(`https://java-railwaw-crud-apirest-production.up.railway.app/productos/${productoActualizado.productoId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(productoModificado),
-            });
+                body: JSON.stringify(productoActualizado),
+            })
             if (!response.ok) {
-                throw new Error('Error al actualizar el producto');
+                throw new Error('Error al actualizar el producto')
             }
-            const updatedProducto = await response.json();
+    
+            const updatedProducto = await response.json()
             const updatedProductos = productos.map((producto) =>
                 producto.id === updatedProducto.id ? updatedProducto : producto
             );
-            setProductos(updatedProductos);
+            setProductos(updatedProductos)
+    
+            // Actualizar la relación si el comercio ha cambiado
+            if (productoModificado.idComercio && productoModificado.idComercio !== productoActual.idComercio) {
+                await addRelacion(productoModificado.idComercio, updatedProducto.id)
+            }
         } catch (error) {
-            setErrors(error.message);
+            setErrors(error.message)
         }
-    };
+    }
+    
 
     return (
         <>

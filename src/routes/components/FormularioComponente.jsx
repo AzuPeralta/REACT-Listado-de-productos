@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react'
+import { ComercioContext } from '../context/ComercioContext';
 
-export const FormularioComponente = ({ addProducto, addRelacion, comercios }) => {
+export const FormularioComponente = ({ addProducto, addRelacion, comercios: comerciosProps }) => {
     const initialForm = {
         nombre: '',
         precio: '',
@@ -8,6 +9,8 @@ export const FormularioComponente = ({ addProducto, addRelacion, comercios }) =>
         idComercio: '',
     };
     const [formState, setFormState] = useState(initialForm);
+    const { comercios } = useContext(ComercioContext)
+
 
     const onInputChange = ({ target }) => {
         const { name, value } = target;
