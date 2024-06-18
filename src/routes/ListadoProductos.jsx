@@ -86,38 +86,46 @@ export const ListadoProductos = () => {
             // Obtener el producto actual
             const productoActual = productos.find((producto) => producto.id === productoModificado.productoId);
     
+            if (!productoActual) {
+                throw new Error('Producto no encontrado');
+            }
+    
             // Crear un nuevo objeto con los valores actualizados, manteniendo los originales si no se han modificado
             const productoActualizado = {
                 ...productoActual,
                 nombre: productoModificado.nombre || productoActual.nombre,
                 precio: productoModificado.precio || productoActual.precio,
-            }
+            };
     
-            const response = await fetch(`https://java-railwaw-crud-apirest-production.up.railway.app/productos/${productoActualizado.productoId}`, {
+            const response = await fetch(`https://java-railwaw-crud-apirest-production.up.railway.app/productos/${productoActualizado.id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(productoActualizado),
-            })
+            });
+    
             if (!response.ok) {
-                throw new Error('Error al actualizar el producto')
+                const errorDetails = await response.json();
+                throw new Error(`Error ${response.status}: ${errorDetails.message}`);
             }
     
-            const updatedProducto = await response.json()
-            const updatedProductos = productos.map((producto) =>
-                producto.id === updatedProducto.id ? updatedProducto : producto
+            const updatedProducto = await response.json();
+            setProductos((prevProductos) => 
+                prevProductos.map((producto) => 
+                    producto.id === updatedProducto.id ? updatedProducto : producto
+                )
             );
-            setProductos(updatedProductos)
     
             // Actualizar la relación si el comercio ha cambiado
             if (productoModificado.idComercio && productoModificado.idComercio !== productoActual.idComercio) {
-                await addRelacion(productoModificado.idComercio, updatedProducto.id)
+                await addRelacion(productoModificado.idComercio, updatedProducto.id);
             }
         } catch (error) {
-            setErrors(error.message)
+            setErrors(error.message);
         }
-    }
+    };
+    
     
 
     return (
